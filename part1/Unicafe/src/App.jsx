@@ -7,26 +7,28 @@ const Button = ({onClick, text}) => (
     <button onClick={onClick}>{text}</button>
 )
 
-const Text = ({text}) => <p>{text}</p>
+const StatisticLine = ({text, value, isPercentage}) => (
+    <p>{text} {value} {isPercentage ? " %" : ""}</p>
+)
 
 const Statistics = ({stats}) => {
     if (stats[3] === 0) {
         return (
             <div>
-                <Header text={"statistics"} />
-                <Text text={"No feedback given"} />
+                <h1>statistics</h1>
+                <p>No feedback given</p>
             </div>
         )
     } else {
         return (
             <div>
-                <Header text={"statistics"} />
-                <Text text={"good " + stats[0]} />
-                <Text text={"neutral " + stats[1]} />
-                <Text text={"bad " + stats[2]} />
-                <Text text={"all " + stats[3]} />
-                <Text text={"average " + stats[4]} />
-                <Text text={"positive " + stats[5] + " %"} />
+                <h1>statistics</h1>
+                <StatisticLine text={"good "} value={stats[0]} />
+                <StatisticLine text={"neutral "} value={stats[1]} />
+                <StatisticLine text={"bad "} value={stats[2]} />
+                <StatisticLine text={"all "} value={stats[3]} />
+                <StatisticLine text={"average "} value={stats[4]} />
+                <StatisticLine text={"positive "} value={stats[5]} isPercentage={true} />
             </div>
         )
     }
