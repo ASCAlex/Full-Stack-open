@@ -6,6 +6,10 @@ const Button = ({onClick, text}) => {
     )
 }
 
+const Header = ({text}) => <h1>{text}</h1>
+
+const Para = ({text}) => <p>{text}</p>
+
 const App = () => {
     const anecdotes = [
         'If it hurts, do it more often.',
@@ -40,9 +44,12 @@ const App = () => {
 
     return (
         <div>
-            <p>{anecdotes[selected]}</p>
+            <Header text={"Anecdote of the day"} />
+            <Para text={anecdotes[selected]} />
             <Button onClick={handleVoteClick} text={"vote"} />
             <Button onClick={handleNextClick} text={"next anecdote"} />
+            <Header text={"Anecdote with most votes"} />
+            <Para text={anecdotes[points.indexOf(Math.max(...points))]} />
         </div>
     )
 }
