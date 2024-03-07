@@ -9,17 +9,28 @@ const Button = ({onClick, text}) => (
 
 const Text = ({text}) => <p>{text}</p>
 
-const Statistics = ({stats}) => (
-    <div>
-        <Header text={"statistics"} />
-        <Text text={"good " + stats[0]} />
-        <Text text={"neutral " + stats[1]} />
-        <Text text={"bad " + stats[2]} />
-        <Text text={"all " + stats[3]} />
-        <Text text={"average " + stats[4]} />
-        <Text text={"positive " + stats[5] + " %"} />
-    </div>
-)
+const Statistics = ({stats}) => {
+    if (stats[3] === 0) {
+        return (
+            <div>
+                <Header text={"statistics"} />
+                <Text text={"No feedback given"} />
+            </div>
+        )
+    } else {
+        return (
+            <div>
+                <Header text={"statistics"} />
+                <Text text={"good " + stats[0]} />
+                <Text text={"neutral " + stats[1]} />
+                <Text text={"bad " + stats[2]} />
+                <Text text={"all " + stats[3]} />
+                <Text text={"average " + stats[4]} />
+                <Text text={"positive " + stats[5] + " %"} />
+            </div>
+        )
+    }
+}
 
 const App = () => {
     // save clicks of each button to its own state
@@ -39,8 +50,6 @@ const App = () => {
             <Button onClick={() => setBad(bad + 1)} text={"bad"} />
 
             <Statistics stats={[good, neutral, bad, all, average, positive]} />
-
-
         </div>
     )
 }
