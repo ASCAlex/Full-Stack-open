@@ -8,7 +8,9 @@ const Button = ({onClick, text}) => (
 )
 
 const StatisticLine = ({text, value, isPercentage}) => (
-    <p>{text} {value} {isPercentage ? " %" : ""}</p>
+    <tr>
+        <td>{text} {value} {isPercentage ? " %" : ""}</td>
+    </tr>
 )
 
 const Statistics = ({stats}) => {
@@ -23,12 +25,16 @@ const Statistics = ({stats}) => {
         return (
             <div>
                 <h1>statistics</h1>
-                <StatisticLine text={"good "} value={stats[0]} />
-                <StatisticLine text={"neutral "} value={stats[1]} />
-                <StatisticLine text={"bad "} value={stats[2]} />
-                <StatisticLine text={"all "} value={stats[3]} />
-                <StatisticLine text={"average "} value={stats[4]} />
-                <StatisticLine text={"positive "} value={stats[5]} isPercentage={true} />
+                <table>
+                    <tbody>
+                        <StatisticLine text={"good "} value={stats[0]} />
+                        <StatisticLine text={"neutral "} value={stats[1]} />
+                        <StatisticLine text={"bad "} value={stats[2]} />
+                        <StatisticLine text={"all "} value={stats[3]} />
+                        <StatisticLine text={"average "} value={stats[4]} />
+                        <StatisticLine text={"positive "} value={stats[5]} isPercentage={true} />
+                    </tbody>
+                </table>
             </div>
         )
     }
