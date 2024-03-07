@@ -19,8 +19,16 @@ const App = () => {
     ]
 
     const [selected, setSelected] = useState(0)
+    const [points, setPoints] = useState(new Array(anecdotes.length).fill(0))
 
-    const handleClick = () => {
+    const handleVoteClick = () => {
+        console.log(points)
+        const copy = [...points]
+        copy[selected] += 1
+        setPoints(copy)
+    }
+
+    const handleNextClick = () => {
         console.log(selected)
         let newValue = selected
         // make sure to not repeat the same anecdote twice in a row
@@ -33,7 +41,8 @@ const App = () => {
     return (
         <div>
             <p>{anecdotes[selected]}</p>
-            <Button onClick={handleClick} text={"next anecdote"} />
+            <Button onClick={handleVoteClick} text={"vote"} />
+            <Button onClick={handleNextClick} text={"next anecdote"} />
         </div>
     )
 }
