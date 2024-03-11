@@ -8,19 +8,21 @@ const App = () => {
 
     const addEntry = (event) => {
         event.preventDefault()
-        const phonebookEntry = {
-            name: newName
+        const phonebookEntry = { name: newName }
+        const checkEqual = persons.some((person) => person.name === phonebookEntry.name)
+        if (checkEqual) {
+            alert(`${newName} is already added to phonebook`)
+        } else {
+            setPersons(persons.concat(phonebookEntry))
         }
-        setPersons(persons.concat(phonebookEntry))
         setNewName('')
-        console.log('button clicked', event.target)
     }
 
     const handleEntryChange = (event) => {
         setNewName(event.target.value)
     }
 
-    const Number = ({person}) => {
+    const Person = ({person}) => {
         return (
             <>{person.name}<br/></>
         )
@@ -40,7 +42,7 @@ const App = () => {
             <h2>Numbers</h2>
             <p>
                 {persons.map(person =>
-                    <Number key={person.name} person={person} />
+                    <Person key={person.name} person={person} />
                 )}
             </p>
         </div>
