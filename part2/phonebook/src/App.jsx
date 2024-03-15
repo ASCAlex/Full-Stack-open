@@ -69,6 +69,20 @@ const App = () => {
         setNewNumber('')
     }
 
+    const deleteEntry = (id) => {
+        const person = persons.find(p => p.id === id)
+
+        personService.deletePerson(id)
+            .then(response => {
+                console.log(`Deleted ${response}`);
+                setPersons(persons.filter(p => p.id !== id))
+            })
+            .catch(error => {
+                alert(`${person} is already deleted`);
+                setPersons(persons.filter(p => p.id !== id))
+            });
+    }
+
     const handleNameChange = (event) => {
         setNewName(event.target.value)
     }
@@ -81,9 +95,15 @@ const App = () => {
         setNewFilter(event.target.value)
     }
 
+    const handleDeleteClick = (id, name) => {
+        if (window.confirm(`Do you really want to delete ${name}?`)) {
+            deleteEntry(id)
+        }
+    }
+
     const Person = ({person}) => {
         return (
-            <>{person.name} {person.number}<br/></>
+            <>{person.name} {person.number} <button onClick={() => handleDeleteClick(person.id, person.name)}>delete</button><br/></>
         )
     }
 
