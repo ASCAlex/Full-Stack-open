@@ -56,9 +56,20 @@ const App = () => {
     const addEntry = (event) => {
         event.preventDefault()
         const phonebookEntry = { name: newName, number: newNumber}
-        const checkEqual = persons.some((person) => person.name === phonebookEntry.name)
+        const checkEqual = persons.some((person) => person.name.toLowerCase() === phonebookEntry.name.toLowerCase())
         if (checkEqual) {
-                alert(`${newName} is already added to phonebook`)
+            if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+                const oldEntry = persons.find(p => p.name.toLowerCase() === phonebookEntry.name.toLowerCase())
+                const newObject = { ...oldEntry, number: phonebookEntry.number}
+                personService.update(oldEntry.id, newObject)
+                    .then(returnedPerson => {
+                        setPersons(persons.map(p => p.id !== oldEntry.id ? p : returnedPerson))
+                    })
+                    .catch( error => {
+                        alert(`${oldEntry.name} was already deleted from server`)
+                        setPersons(persons.filter(p => p.id !== oldEntry.id))
+                    })
+            }
         } else {
             personService.create(phonebookEntry)
                 .then(returnedPerson => {
@@ -71,7 +82,6 @@ const App = () => {
 
     const deleteEntry = (id) => {
         const person = persons.find(p => p.id === id)
-
         personService.deletePerson(id)
             .then(response => {
                 console.log(`Deleted ${response}`);
