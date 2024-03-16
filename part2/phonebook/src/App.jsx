@@ -44,6 +44,7 @@ const App = () => {
     const [newNumber, setNewNumber] = useState('')
     const [newFilter, setNewFilter] = useState('')
     const [notificationMessage, setNotificationMessage] = useState(null)
+    const [notificationColor, setNotificationColor] = useState('')
 
     useEffect(() => {
         console.log('effect')
@@ -68,12 +69,16 @@ const App = () => {
                         setNotificationMessage(
                             `Changed number of ${oldEntry.name}`
                         )
+                        setNotificationColor('green')
                         setTimeout(() => {
                             setNotificationMessage(null)
                         }, 5000)
                     })
                     .catch( error => {
-                        alert(`${oldEntry.name} was already deleted from server`)
+                        setNotificationMessage(
+                            `Information of ${phonebookEntry.name} has already been removed from server`
+                        )
+                        setNotificationColor('red')
                         setPersons(persons.filter(p => p.id !== oldEntry.id))
                     })
             }
@@ -84,6 +89,7 @@ const App = () => {
                     setNotificationMessage(
                         `Added ${phonebookEntry.name}`
                     )
+                    setNotificationColor('green')
                     setTimeout(() => {
                         setNotificationMessage(null)
                     }, 5000)
@@ -130,12 +136,12 @@ const App = () => {
         )
     }
 
-    const Notification = ( {message} ) => {
+    const Notification = ( {message, color} ) => {
         if (message === null) {
             return null
         }
         const notificationStyle = {
-            color: 'green',
+            color: color,
             background: 'lightgrey',
             fontSize: 20,
             borderStyle: 'solid',
@@ -155,7 +161,7 @@ const App = () => {
         <div>
             <h2>Phonebook</h2>
 
-            <Notification message={notificationMessage} />
+            <Notification message={notificationMessage} color={notificationColor}/>
 
             <Filter newFilter={newFilter} handleFilterChange={handleFilterChange} />
 
