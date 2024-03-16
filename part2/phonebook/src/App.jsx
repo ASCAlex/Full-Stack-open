@@ -43,6 +43,7 @@ const App = () => {
     const [newName, setNewName] = useState('')
     const [newNumber, setNewNumber] = useState('')
     const [newFilter, setNewFilter] = useState('')
+    const [notificationMessage, setNotificationMessage] = useState('')
 
     useEffect(() => {
         console.log('effect')
@@ -64,6 +65,12 @@ const App = () => {
                 personService.update(oldEntry.id, newObject)
                     .then(returnedPerson => {
                         setPersons(persons.map(p => p.id !== oldEntry.id ? p : returnedPerson))
+                        setNotificationMessage(
+                            `Changed number of ${oldEntry.name}`
+                        )
+                        setTimeout(() => {
+                            setNotificationMessage(null)
+                        }, 5000)
                     })
                     .catch( error => {
                         alert(`${oldEntry.name} was already deleted from server`)
@@ -74,6 +81,12 @@ const App = () => {
             personService.create(phonebookEntry)
                 .then(returnedPerson => {
                     setPersons(persons.concat(returnedPerson))
+                    setNotificationMessage(
+                        `Added ${phonebookEntry.name}`
+                    )
+                    setTimeout(() => {
+                        setNotificationMessage(null)
+                    }, 5000)
                 })
         }
         setNewName('')
@@ -117,9 +130,32 @@ const App = () => {
         )
     }
 
+    const Notification = ( {message} ) => {
+        if (message === null) {
+            return null
+        }
+        const notificationStyle = {
+            color: 'green',
+            background: 'lightgrey',
+            fontSize: 20,
+            borderStyle: 'solid',
+            borderRadius: 5,
+            padding: 10,
+            marginBottom: 10
+        }
+
+        return (
+            <div style={notificationStyle}>
+                {message}
+            </div>
+        )
+    }
+
     return (
         <div>
             <h2>Phonebook</h2>
+
+            <Notification message={notificationMessage} />
 
             <Filter newFilter={newFilter} handleFilterChange={handleFilterChange} />
 
