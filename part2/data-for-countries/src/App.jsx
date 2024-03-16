@@ -10,9 +10,28 @@ const Filter = ( {newFilter, handleFilterChange} ) => {
     )
 }
 
-const Country = ( {country} ) => {
+const Country = ( {country, handleShowClick} ) => {
     return (
-        <>{country.name.common}<br/></>
+        <>{country.name.common}<button onClick={() => handleShowClick(country.name.common)}>show</button><br/></>
+    )
+}
+
+const DetailedCountry = ( {country} ) => {
+    return (
+        <>
+            <h1>{country.name.common}</h1>
+            <p>
+                capital {country.capital} <br/>
+                area {country.area}
+            </p>
+            <h2>languages:</h2>
+            <ul>
+                {Object.entries(country.languages).map(([code, name]) => (
+                    <Language key={code} language={name} />
+                ))}
+            </ul>
+            <img src={country.flags.png} alt={country.flags.alt}></img>
+        </>
     )
 }
 
@@ -22,7 +41,7 @@ const Language = ( {language }) => {
     )
 }
 
-const Countries = ( { countries, newFilter } ) => {
+const Countries = ( { countries, newFilter, handleShowClick} ) => {
     const filteredCountries = countries.filter(
         c => c.name.common.toLowerCase().includes(newFilter.toLowerCase().trim())
     )
@@ -36,22 +55,9 @@ const Countries = ( { countries, newFilter } ) => {
     }
     if (filteredCountries.length === 1) {
         const country = filteredCountries[0]
-        console.log("capital", country.capital)
-        console.log("languages:", country.languages)
         return (
             <div>
-                <h1>{country.name.common}</h1>
-                <p>
-                    capital {country.capital} <br/>
-                    area {country.area}
-                </p>
-                <h2>languages:</h2>
-                <ul>
-                    {Object.entries(country.languages).map(([code, name]) => (
-                        <Language key={code} language={name} />
-                    ))}
-                </ul>
-                <img src={country.flags.png} alt={country.flags.alt}></img>
+                <DetailedCountry country={country} />
             </div>
         )
     }
@@ -60,7 +66,7 @@ const Countries = ( { countries, newFilter } ) => {
             {countries.filter(
                 c => c.name.common.toLowerCase().includes(newFilter.toLowerCase().trim())
             ).map(country =>
-                <Country key={country.name.common} country={country} />
+                <Country key={country.name.common} country={country} handleShowClick={handleShowClick}/>
             )}
         </p>
     )
@@ -81,11 +87,15 @@ function App() {
         setNewFilter(event.target.value)
     }
 
+    const handleShowClick = (name) => {
+        setNewFilter(name)
+    }
+
     return (
         <div>
             <Filter newFilter={newFilter} handleFilterChange={handleFilterChange} />
 
-            <Countries countries={countries} newFilter={newFilter} />
+            <Countries countries={countries} newFilter={newFilter} handleShowClick={handleShowClick}/>
         </div>
     )
 }
