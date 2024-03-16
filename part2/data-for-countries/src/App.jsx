@@ -17,6 +17,19 @@ const Country = ( {country, handleShowClick} ) => {
 }
 
 const DetailedCountry = ( {country} ) => {
+    const [temp, setTemp] = useState(0);
+    const [wind, setWind] = useState(0);
+    useEffect(() => {
+        countriesService.getWeather(country.capital, country.cca2)
+            .then(response => {
+                console.log(response.main.temp)
+                setTemp(Math.round(response.main.temp - 273.15));
+                setWind(response.wind.speed);
+            })
+            .catch(error => {
+                console.error('Error while fetching from Service:', error)
+            })
+    }, [country.capital, country.cca2])
     return (
         <>
             <h1>{country.name.common}</h1>
@@ -31,6 +44,11 @@ const DetailedCountry = ( {country} ) => {
                 ))}
             </ul>
             <img src={country.flags.png} alt={country.flags.alt}></img>
+            <h2>Weather in {country.capital}</h2>
+            <p>
+                temperature {temp} Celsius<br/>
+                wind {wind} m/s
+            </p>
         </>
     )
 }
