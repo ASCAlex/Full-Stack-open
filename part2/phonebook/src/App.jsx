@@ -43,7 +43,7 @@ const App = () => {
     const [newName, setNewName] = useState('')
     const [newNumber, setNewNumber] = useState('')
     const [newFilter, setNewFilter] = useState('')
-    const [notificationMessage, setNotificationMessage] = useState('')
+    const [notificationMessage, setNotificationMessage] = useState(null)
 
     useEffect(() => {
         console.log('effect')
