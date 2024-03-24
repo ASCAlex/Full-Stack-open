@@ -1,7 +1,7 @@
-POST http://localhost:3001/api/notes
+PUT http://localhost:3001/api/notes/65fbe7e5939e19f97bb0265e
 Content-Type: application/json
 
 {
-  "content": "Sending a react-test note",
-  "important": true
+  "content": "HTML is easy",
+  "important": false
 }
