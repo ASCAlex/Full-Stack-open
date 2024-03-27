@@ -9,7 +9,7 @@ const config = require('./utils/config')
 
 mongoose.set('strictQuery', false)
 
-logger.info('connecting to', config.MONGODB_URI)
+logger.info('connecting to MongoDB')
 
 mongoose.connect(config.MONGODB_URI)
     .then(result => {
@@ -29,6 +29,5 @@ app.use('/api/notes', notesRouter)
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
 
-module.exports = {
-    app
-}
+module.exports = app
+
