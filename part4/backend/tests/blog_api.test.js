@@ -1,4 +1,4 @@
-const { test, after, beforeEach} = require('node:test')
+const { test, after, beforeEach } = require('node:test')
 const Blogs = require('../models/blog')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
@@ -26,7 +26,7 @@ test('verify that a get request returns the correct amount of blogs in JSON form
     assert.strictEqual(response.body.length, helper.initialBlogs.length)
 })
 
-test.only('verify that identifier of a blog is id not _id', async () => {
+test('verify that identifier of a blog is id not _id', async () => {
     const blogs = await helper.blogsInDB()
     const blogToView = blogs[0]
 
@@ -35,6 +35,57 @@ test.only('verify that identifier of a blog is id not _id', async () => {
         .expect(200)
 
     assert.strictEqual(response.body.id, blogToView.id)
+})
+
+test('verify that POST creates a new blog post', async() => {
+    const newBlog = {
+        title: 'Hello Darkness',
+        author: 'Alex Scheick',
+        url: 'https://www.google.com/',
+        likes: 11
+    }
+
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
+
+    const blogsAfter = await helper.blogsInDB()
+    assert.strictEqual(blogsAfter.length, helper.initialBlogs.length + 1)
+
+    const titles = blogsAfter.map(b => b.title)
+    assert(titles.includes('Hello Darkness'))
+})
+
+test('Verify likes are 0 on default if likes-property is missing', async() => {
+    const newBlog = {
+        title: 'Hello Darkness',
+        author: 'Alex Scheick',
+        url: 'https://www.google.com/',
+    }
+
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
+
+    const blogsAfter = await helper.blogsInDB()
+    const blog = blogsAfter.find(b => b.title === 'Hello Darkness')
+    assert(blog.likes === 0)
+})
+
+test.only('Verify that if URL or title is not passed return status code 400', async() => {
+    const newBlog = {
+        author: 'Alex Scheick',
+        likes: 7
+    }
+
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(400)
 })
 
 after(async () => {

@@ -18,6 +18,10 @@ blogsRouter.get('/:id', async (request, response) => {
 blogsRouter.post('/', async (request, response) => {
     const newBlog = new Blog(request.body)
 
+    if (!newBlog.title || !newBlog.url) {
+        return response.status(400).end()
+    }
+
     const result = await newBlog.save()
     response.status(201).json(result)
 })
