@@ -76,7 +76,7 @@ test('Verify likes are 0 on default if likes-property is missing', async() => {
     assert(blog.likes === 0)
 })
 
-test.only('Verify that if URL or title is not passed return status code 400', async() => {
+test('Verify that if URL or title is not passed return status code 400', async() => {
     const newBlog = {
         author: 'Alex Scheick',
         likes: 7
@@ -86,6 +86,36 @@ test.only('Verify that if URL or title is not passed return status code 400', as
         .post('/api/blogs')
         .send(newBlog)
         .expect(400)
+})
+
+test('Verify that deleting a single blog works correctly', async() => {
+    const blogsBefore = await helper.blogsInDB()
+    const id = blogsBefore[0].id
+
+    await api
+        .delete(`/api/blogs/${id}`)
+        .expect(204)
+
+    const blogsAfter = await helper.blogsInDB()
+    assert.strictEqual(blogsAfter.length, blogsBefore.length - 1)
+})
+
+test.only('Verify that updating a blog works correctly', async() => {
+    const newBlog = {
+        title: 'Good Morning',
+        author: 'Gustav Johnson',
+        url: 'http://www.google.com',
+        likes: 3
+    }
+
+    const blogs = await helper.blogsInDB()
+    const id = blogs[0].id
+
+    const response = await api
+        .put(`/api/blogs/${id}`)
+        .send(newBlog)
+
+    assert.strictEqual(response.body.title, newBlog.title)
 })
 
 after(async () => {
