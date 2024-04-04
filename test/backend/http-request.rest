@@ -1,7 +1,29 @@
-PUT http://localhost:3001/api/notes/65fbe7e5939e19f97bb0265e
+POST http://localhost:3001/api/users
 Content-Type: application/json
 
 {
-  "content": "HTML is easy",
+  "username": "Steiner",
+  "name": "Gustav",
+  "password": "steiner"
+}
+
+###
+
+POST http://localhost:3001/api/login
+Content-Type: application/json
+
+{
+  "username": "Steiner",
+  "password": "steiner"
+}
+
+###
+
+POST http://localhost:3001/api/notes
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlN0ZWluZXIiLCJpZCI6IjY2MGNmMzY3MWUyMTMxYzQxYjNmNWVhMSIsImlhdCI6MTcxMjEyNTYwOX0.aUV5Jtin3gff70XRFP4zTWNqmIWSRusXGDS09oDrcr4
+
+{
+  "content": "Singe page apps use token based auth",
   "important": false
 }
