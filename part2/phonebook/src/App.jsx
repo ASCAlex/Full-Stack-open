@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react'
-import axios from "axios";
 import personService from './services/persons.js'
 
-const Filter = ({newFilter, handleFilterChange}) => {
+const Filter = ({ newFilter, handleFilterChange }) => {
     return (
         <>
             filter shown with <input value={newFilter} onChange={handleFilterChange}/>
@@ -10,7 +9,7 @@ const Filter = ({newFilter, handleFilterChange}) => {
     )
 }
 
-const PersonForm = ({addEntry, newName, newNumber, handleNameChange, handleNumberChange}) => {
+const PersonForm = ({ addEntry, newName, newNumber, handleNameChange, handleNumberChange }) => {
     return(
         <form onSubmit={addEntry}>
             <div>
@@ -26,7 +25,7 @@ const PersonForm = ({addEntry, newName, newNumber, handleNameChange, handleNumbe
     )
 }
 
-const Persons = ({persons, newFilter, Person}) => {
+const Persons = ({ persons, newFilter, Person }) => {
     return (
         <p>
             {persons.filter(person =>
@@ -130,13 +129,13 @@ const App = () => {
         }
     }
 
-    const Person = ({person}) => {
+    const Person = ({ person }) => {
         return (
-            <>{person.name} {person.number} <button onClick={() => handleDeleteClick(person.id, person.name)}>delete</button><br/></>
+            <>{ person.name } { person.number } <button onClick={() => handleDeleteClick(person.id, person.name)}>delete</button><br/></>
         )
     }
 
-    const Notification = ( {message, color} ) => {
+    const Notification = ( { message, color } ) => {
         if (message === null) {
             return null
         }
