@@ -61,9 +61,12 @@ describe('blogTests', () => {
             url: 'https://www.google.com/',
             likes: 11
         }
+        await helper.createUser()
+        const token = await helper.login(helper.newUser.username, helper.newUser.password)
 
         await api
             .post('/api/blogs')
+            .set('Authorization', `Bearer ${token}`)
             .send(newBlog)
             .expect(201)
             .expect('Content-Type', /application\/json/)
@@ -81,9 +84,12 @@ describe('blogTests', () => {
             author: 'Alex Scheick',
             url: 'https://www.google.com/',
         }
+        await helper.createUser()
+        const token = await helper.login(helper.newUser.username, helper.newUser.password)
 
         await api
             .post('/api/blogs')
+            .set('Authorization', `Bearer ${token}`)
             .send(newBlog)
             .expect(201)
             .expect('Content-Type', /application\/json/)
@@ -98,19 +104,36 @@ describe('blogTests', () => {
             author: 'Alex Scheick',
             likes: 7
         }
+        await helper.createUser()
+        const token = await helper.login(helper.newUser.username, helper.newUser.password)
 
         await api
             .post('/api/blogs')
+            .set('Authorization', `Bearer ${token}`)
             .send(newBlog)
             .expect(400)
     })
 
     test('Verify that deleting a single blog works correctly', async() => {
-        const blogsBefore = await helper.blogsInDB()
-        const id = blogsBefore[0].id
+        const newBlog = {
+            title: 'Hello Darkness',
+            author: 'Alex Scheick',
+            url: 'https://www.google.com/',
+        }
+        await helper.createUser()
+        const token = await helper.login(helper.newUser.username, helper.newUser.password)
 
         await api
+            .post('/api/blogs')
+            .set('Authorization', `Bearer ${token}`)
+            .send(newBlog)
+            .expect(201)
+            .expect('Content-Type', /application\/json/)
+        const blogsBefore = await helper.blogsInDB()
+        const id = blogsBefore[2].id
+        await api
             .delete(`/api/blogs/${id}`)
+            .set('Authorization', `Bearer ${token}`)
             .expect(204)
 
         const blogsAfter = await helper.blogsInDB()
@@ -133,6 +156,23 @@ describe('blogTests', () => {
             .send(newBlog)
 
         assert.strictEqual(response.body.title, newBlog.title)
+    })
+
+    test('Verify that adding a blog with wrong token returns status code 401', async() => {
+        const newBlog = {
+            title: 'Good Morning',
+            author: 'Gustav Johnson',
+            url: 'http://www.google.com',
+            likes: 3
+        }
+
+        const token = 'eyKhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFsZXgiLCJpZCI6IjY2MTRlYzJlNGExYTRlYTNmZGQ3N2NlZSIsImlhdCI6MTcxMjY0NzIxNH0.7yuoFPgCmFnMtvs9zHlFZAjy3BGwdWp1oXJ-oakVNu4'
+
+        await api
+            .post('/api/blogs')
+            .set('Authorization', `Bearer ${token}`)
+            .send(newBlog)
+            .expect(401)
     })
 })
 
